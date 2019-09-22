@@ -37,10 +37,10 @@ Author :
   - [3.2 Vivado SDK](#32-vivado-sdk)
     - [3.2.1 Launch SDK](#321-launch-sdk)
     - [3.2.2 Create Project](#322-create-project)
-- [4. ILA and SDK Debug](#4-ila-and-sdk-debug)
-  - [4.1 Requirement](#41-requirement)
-  - [4.2 Use Vivado](#42-use-vivado)
-  - [4.3 Vivado SDK](#43-vivado-sdk)
+    - [3.2.3 Choose Hello World Template](#323-choose-hello-world-template)
+    - [3.2.4 Check Custom IP Bus Address](#324-check-custom-ip-bus-address)
+    - [3.2.5 撰寫程式碼(基礎 : 請填問號)](#325-%e6%92%b0%e5%af%ab%e7%a8%8b%e5%bc%8f%e7%a2%bc%e5%9f%ba%e7%a4%8e--%e8%ab%8b%e5%a1%ab%e5%95%8f%e8%99%9f)
+    - [3.2.6 撰寫程式碼(進階 : Print Hardware Operate Passed)](#326-%e6%92%b0%e5%af%ab%e7%a8%8b%e5%bc%8f%e7%a2%bc%e9%80%b2%e9%9a%8e--print-hardware-operate-passed)
 
 ## 2. Package Adder Wrapper
 ### 2.1 Requirement
@@ -110,20 +110,20 @@ In this tutorial, I use :
 ![Edit_IP_4](./images/Package_Wrapper/EDIT_IP_4.PNG)
 
 ```verilog
-Adder #(.ADDRESS_SIZE(ADDRESS_SIZE), .WORD_SIZE(WORD_SIZE), .WORD_NUMBER(WORD_NUMBER)) M0 (
-    .IN_DATA(slv_reg0),
-    .OUT_DATA(OUT_DATA),
-    .IN_ADDR(slv_reg1[ADDRESS_SIZE-1 : 0]),
-    .OUT_ADDR(slv_reg2[ADDRESS_SIZE-1 : 0]),
-    .IN_WEN(slv_reg3[0]),
-    .OUT_CEN(slv_reg4[0]),
-    .RAM_SEL(slv_reg5[0]),
-    .start(slv_reg6[0]),
-    .finish(finish),
-    .busy(busy),
-    .CLK(S_AXI_ACLK),
-    .RST_N(S_AXI_ARESETN&&slv_reg7[0])
-);
+483 Adder #(.ADDRESS_SIZE(ADDRESS_SIZE), .WORD_SIZE(WORD_SIZE), .WORD_NUMBER(WORD_NUMBER)) M0 (
+484     .IN_DATA(slv_reg0),
+485     .OUT_DATA(OUT_DATA),
+486     .IN_ADDR(slv_reg1[ADDRESS_SIZE-1 : 0]),
+487     .OUT_ADDR(slv_reg2[ADDRESS_SIZE-1 : 0]),
+488     .IN_WEN(slv_reg3[0]),
+489     .OUT_CEN(slv_reg4[0]),
+490     .RAM_SEL(slv_reg5[0]),
+491     .start(slv_reg6[0]),
+492     .finish(finish),
+493     .busy(busy),
+494     .CLK(S_AXI_ACLK),
+495     .RST_N(S_AXI_ARESETN&&slv_reg7[0])
+496 );
 ```
 
 ![Edit_IP_5](./images/Package_Wrapper/EDIT_IP_5.PNG)
@@ -203,11 +203,130 @@ In this tutorial, I use :
 [Lab1](../lab1/Lab1.md)
 
 #### 3.2.2 Create Project
-```markdown
-File &rarr; 
+
+- File &rarr; New &rarr; Application Project
+
+![SDK](./images/SDK/create_project.png)
+
+#### 3.2.3 Choose Hello World Template
+
+![hello_world](./images/SDK/hello_world.png)
+
+#### 3.2.4 Check Custom IP Bus Address
+
+- Adder_0 Bus Address : 0x43C00000
+
+![bus_address](./images/SDK/bus_address.png)
+
+#### 3.2.5 撰寫程式碼(基礎 : 請填問號)
+
+```c
+#include <stdio.h>
+#include "platform.h"
+#include "xil_printf.h"
+
+//Address Offset
+#define IN_DATA ??
+#define IN_ADDR ??
+#define OUT_ADDR ??
+#define IN_WEN ??
+#define OUT_CEN ??
+#define RAM_SEL ??
+#define start ??
+#define RST_N ??
+#define OUT_DATA ??
+#define finish ??
+#define busy ??
+
+#define WORD_NUMBER 1024
+#define RAM_A 0
+#define RAM_B 1
+
+int main()
+{
+    init_platform();
+    volatile unsigned long *base = (volatile unsigned long*) 0x43c00000;
+    unsigned int i = 0;
+    unsigned int count = 0;
+    unsigned char is_Pass = 1;
+
+    //Input Data Initial
+    base[RST_N] = 1;
+    base[RST_N] = 0;
+    base[RST_N] = 1;
+    base[IN_WEN] = 1;
+    base[OUT_CEN] = 0;
+
+    //Input RAM_A
+    base[RAM_SEL] = RAM_A;
+    for(i = 0; i < WORD_NUMBER ; i++){
+    	base[IN_ADDR] = i;
+    	base[IN_DATA] = i;
+    }
+
+    //Input RAM_B
+    base[RAM_SEL] = RAM_B;
+    for(i = 0; i < WORD_NUMBER ; i++){
+    	base[IN_ADDR] = i;
+        base[IN_DATA] = i;
+    }
+
+    //Start operate
+    base[IN_WEN] = 0;
+    base[start] = 1;
+    for(count = 0; count < 10000;count++){
+    	if(base[finish]&&!base[busy]){
+    		xil_printf("Operate Finish.\n");
+    		break;
+    	}
+    	else
+    		if(count == 9999)
+    			xil_printf("Hardware Failed.\n");
+    		else{
+    			xil_printf("%d.\n",count);
+    			continue;
+    		}
+    }
+
+    //Verification
+    base[OUT_CEN] = 1;
+    for(i = 0; i < WORD_NUMBER ; i++){
+    	base[OUT_ADDR] = i;
+    	if(base[OUT_DATA] != 2*i){
+    		if(is_Pass != 0)
+    			xil_printf("Hardware Operate Failed.\n");
+    		xil_printf("Address = %d, OUT_DATA = %d\n", i, base[OUT_DATA]);
+    		is_Pass = 0;
+    		//break;
+    	}
+    }
+    
+    if(is_Pass)
+    	xil_printf("Hardware Operate Passed.\n");
+    else
+        xil_printf("Hardware Operate Failed.\n");
+
+
+    cleanup_platform();
+    return 0;
+}
 ```
 
-## 4. ILA and SDK Debug
-### 4.1 Requirement
-### 4.2 Use Vivado
-### 4.3 Vivado SDK
+#### 3.2.6 撰寫程式碼(進階 : Print Hardware Operate Passed)
+
+- Edit Verification
+
+```c
+//Verification
+    base[OUT_CEN] = 1;
+    for(i = 0; i < WORD_NUMBER ; i++){
+    	base[OUT_ADDR] = i;
+    	if(base[OUT_DATA] != 3*i){ //Change 2*i to 3*i
+    		if(is_Pass != 0)
+    			xil_printf("Hardware Operate Failed.\n");
+    		xil_printf("Address = %d, OUT_DATA = %d\n", i, base[OUT_DATA]);
+    		is_Pass = 0;
+    		//break;
+    	}
+    }
+```

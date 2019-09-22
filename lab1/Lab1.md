@@ -85,7 +85,7 @@ Author :
       - [4.4.4 Using Pacman](#444-using-pacman)
   - [(基礎)Test : Print Hello World(Using C++)](#%e5%9f%ba%e7%a4%8etest--print-hello-worldusing-c)
   - [(進階)Print Fibonacci number](#%e9%80%b2%e9%9a%8eprint-fibonacci-number)
-  - [(加分)Float(IEEE-754) 轉成 Integer](#%e5%8a%a0%e5%88%86floatieee-754-%e8%bd%89%e6%88%90-integer)
+  - [(加分)Float(IEEE-754) 轉成 Integer(Use pointer)](#%e5%8a%a0%e5%88%86floatieee-754-%e8%bd%89%e6%88%90-integeruse-pointer)
 
 ## 2. Vivado
 ### 2.1 Requirement
@@ -303,7 +303,10 @@ petalinux-XXX -h
 #### 3.3.1 Create Petalinux Project
 ```bash
 petalinux-create -t project -s avnet-digilent-zedboard-v2018.3-final.bsp
-cd <Path_to_Petalinux_Project> 
+```
+- Note : **必須**把工作環境切換至Petalinux專案資料夾裡面
+```bash
+cd <Path_to_Petalinux_Project>/<Petalinux_project_name>
 ```
 #### 3.3.2 Setting Petalinux Project
 ```bash
@@ -488,6 +491,6 @@ pacman  -S vim base-devel
 
 ![test_2](./images/test/test_2.png)
 
-## (加分)Float(IEEE-754) 轉成 Integer
+## (加分)Float(IEEE-754) 轉成 Integer(Use pointer)
 
 ![test_3](./images/test/test_3.png)
