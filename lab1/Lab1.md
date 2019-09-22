@@ -302,7 +302,7 @@ petalinux-XXX -h
 
 #### 3.3.1 Create Petalinux Project
 ```bash
-petalinux-create -t project -s avnet-digilent-zedboard-v2018.3-final
+petalinux-create -t project -s avnet-digilent-zedboard-v2018.3-final.bsp
 cd <Path_to_Petalinux_Project> 
 ```
 #### 3.3.2 Setting Petalinux Project
