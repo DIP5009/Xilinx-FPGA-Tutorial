@@ -448,8 +448,8 @@ sudo umount ext4
 ```bash
 mkdir fat
 sudo mount /dev/sdc1 fat
-cp {path-to-petalinux_project}/images/linux/BOOT.BIN
-cp {path-to-petalinux_project}/images/linux/image.ub
+cp <path-to-petalinux_project>/images/linux/BOOT.BIN
+cp <path-to-petalinux_project>/images/linux/image.ub
 cd fat
 sync
 sudo umount fat
