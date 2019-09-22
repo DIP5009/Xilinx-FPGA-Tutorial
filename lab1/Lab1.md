@@ -85,7 +85,7 @@ Author :
       - [4.4.4 Using Pacman](#444-using-pacman)
   - [(基礎)Test : Print Hello World(Using C++)](#%e5%9f%ba%e7%a4%8etest--print-hello-worldusing-c)
   - [(進階)Print Fibonacci number](#%e9%80%b2%e9%9a%8eprint-fibonacci-number)
-  - [(加分)Transfer Float(IEEE-754) to Integer (Using Pointer)](#%e5%8a%a0%e5%88%86transfer-floatieee-754-to-integer-using-pointer)
+  - [(加分)Float(IEEE-754) 轉成 Integer](#%e5%8a%a0%e5%88%86floatieee-754-%e8%bd%89%e6%88%90-integer)
 
 ## 2. Vivado
 ### 2.1 Requirement
@@ -481,5 +481,13 @@ pacman -Su
 pacman  -S vim base-devel
 ```
 ## (基礎)Test : Print Hello World(Using C++)
+
+![test_1](./images/test/test_1.png)
+
 ## (進階)Print Fibonacci number
-## (加分)Transfer Float(IEEE-754) to Integer (Using Pointer)
+
+![test_2](./images/test/test_2.png)
+
+## (加分)Float(IEEE-754) 轉成 Integer
+
+![test_3](./images/test/test_3.png)
