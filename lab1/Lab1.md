@@ -84,8 +84,8 @@ Author :
       - [4.4.3 Setting Network (Dynamic)](#443-setting-network-dynamic)
       - [4.4.4 Using Pacman](#444-using-pacman)
   - [(基礎)Test : Print Hello World(Using C++)](#%e5%9f%ba%e7%a4%8etest--print-hello-worldusing-c)
-  - [(進階)Print Fibonacci number](#%e9%80%b2%e9%9a%8eprint-fibonacci-number)
-  - [(加分)Float(IEEE-754) 轉成 Integer(Use pointer)](#%e5%8a%a0%e5%88%86floatieee-754-%e8%bd%89%e6%88%90-integeruse-pointer)
+  - [(進階)Package : htop](#%e9%80%b2%e9%9a%8epackage--htop)
+  - [(進階)Package : hwlop](#%e9%80%b2%e9%9a%8epackage--hwlop)
 
 ## 2. Vivado
 ### 2.1 Requirement
@@ -480,17 +480,28 @@ dhcp
 pacman-key --init
 pacman-key --populate archlinuxarm
 pacman -Syy
-pacman -Su
-pacman  -S vim base-devel
+pacman  -S vim base-devel 
 ```
+
+- Note : 若不能正常的安裝套件，可能是系統時間與現實時間差異過多，造成無法安裝套件。
+- 更新系統時間 : date -s "1 Sep 2019 09:00:00"
+- pacman-key --init & pacman-key --populate archlinuxarm : 讓pacman能正常的使用。
+- pacman -Syy : 更新資料庫。
+- pacman -Su : 更新作業系統。
+
+
+
+[ArchLinux Package Website](https://www.archlinux.org/)
+
+
 ## (基礎)Test : Print Hello World(Using C++)
 
 ![test_1](./images/test/test_1.png)
 
-## (進階)Print Fibonacci number
+## (進階)Package : htop
 
 ![test_2](./images/test/test_2.png)
 
-## (加分)Float(IEEE-754) 轉成 Integer(Use pointer)
+## (進階)Package : hwlop
 
 ![test_3](./images/test/test_3.png)
