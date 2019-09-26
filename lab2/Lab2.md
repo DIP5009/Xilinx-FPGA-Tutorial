@@ -220,6 +220,16 @@ In this tutorial, I use :
 
 #### 3.2.5 撰寫程式碼(基礎 : 請填問號)
 
+- Hint 如何得知Adder的記憶體位址
+
+![address_1](./images/Address/Address_1.png)
+
+![address_1](./images/Address/Address_2.png)
+
+```c
+volatile unsigned long *base = (volatile unsigned long*) 0x43C00000;
+//volatile 
+```
 ```c
 #include <stdio.h>
 #include "platform.h"
@@ -251,42 +261,25 @@ int main()
     unsigned char is_Pass = 1;
 
     //Input Data Initial
-    base[RST_N] = 1;
-    base[RST_N] = 0;
-    base[RST_N] = 1;
-    base[IN_WEN] = 1;
-    base[OUT_CEN] = 0;
+    /*
+        自己寫
+    */
+    
 
     //Input RAM_A
-    base[RAM_SEL] = RAM_A;
-    for(i = 0; i < WORD_NUMBER ; i++){
-    	base[IN_ADDR] = i;
-    	base[IN_DATA] = i;
-    }
+    /*
+        自己寫
+    */
 
     //Input RAM_B
-    base[RAM_SEL] = RAM_B;
-    for(i = 0; i < WORD_NUMBER ; i++){
-    	base[IN_ADDR] = i;
-        base[IN_DATA] = i;
-    }
+    /*
+        自己寫
+    */
 
     //Start operate
-    base[IN_WEN] = 0;
-    base[start] = 1;
-    for(count = 0; count < 10000;count++){
-    	if(base[finish]&&!base[busy]){
-    		xil_printf("Operate Finish.\n");
-    		break;
-    	}
-    	else
-    		if(count == 9999)
-    			xil_printf("Hardware Failed.\n");
-    		else{
-    			xil_printf("%d.\n",count);
-    			continue;
-    		}
-    }
+    /*
+        自己寫
+    */
 
     //Verification
     base[OUT_CEN] = 1;
