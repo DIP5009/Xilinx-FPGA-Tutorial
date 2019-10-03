@@ -1,6 +1,4 @@
-parameter ADDRESS_SIZE = 10;
-parameter WORD_SIZE = 32;
-parameter WORD_NUMBER = 1024;
+`timescale 1ns / 1ps
 module Single_Port_Memory(//Input
 						  CLK,
 						  CEN,
@@ -10,6 +8,10 @@ module Single_Port_Memory(//Input
 						  //Output
 						  DOUT
 						  );
+
+parameter ADDRESS_SIZE = 10;
+parameter WORD_SIZE = 32;
+parameter WORD_NUMBER = 1024;
 
 //#################### Input & Output Variable Declare ####################						  
 input CLK ;
