@@ -131,16 +131,17 @@ module_exit(hello_exit);
 
 #### 4.2.4 其他printk優先度
 [參考網站](https://elinux.org/Debugging_by_printing)
-Name | String | Meaning |
- :------------ | :-----------: | :----------- |
-KERN_EMERG    |  "0" |Emergency messages, system is about to crash or is unstable |
-KERN_ALERT    |  "1" |Something bad happened and action must be taken immediately |
-KERN_CRIT     |  "2" |A critical condition occurred like a serious hardware/software failure |
-KERN_ERR      |  "3" |An error condition, often used by drivers to indicate difficulties with the hardware|
-KERN_WARNING  |  "4" |A warning, meaning nothing serious by itself but might indicate problems |
-KERN_NOTICE   |  "5" |Nothing serious, but notably nevertheless. Often used to report security events |
-KERN_INFO     |  "6" |Informational message e.g. startup information at driver initialization |
-KERN_DEBUG    |  "7" |Debug messages |
+
+|Name | String | Meaning |
+| :------------ | :-----------: | :----------- |
+|KERN_EMERG    |  "0" |Emergency messages, system is about to crash or is unstable |
+|KERN_ALERT    |  "1" |Something bad happened and action must be taken immediately |
+|KERN_CRIT     |  "2" |A critical condition occurred like a serious hardware/software failure |
+|KERN_ERR      |  "3" |An error condition, often used by drivers to indicate difficulties with the hardware|
+|KERN_WARNING  |  "4" |A warning, meaning nothing serious by itself but might indicate problems |
+|KERN_NOTICE   |  "5" |Nothing serious, but notably nevertheless. Often used to report security events |
+|KERN_INFO     |  "6" |Informational message e.g. startup information at driver initialization |
+|KERN_DEBUG    |  "7" |Debug messages |
 
 
 ### 4.3 Read Hardware Value (20)
