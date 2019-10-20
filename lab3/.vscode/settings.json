@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "of_address.h": "c",
+        "module.h": "c",
+        "kernel.h": "c"
+    }
+}
