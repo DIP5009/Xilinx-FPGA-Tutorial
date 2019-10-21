@@ -87,14 +87,19 @@ petalinux-build -s <Kernel Module File Name>
 
 ## 4. Kernel Module
 
-### 4.1 掛載/卸載
+### 4.1.1 掛載
 
 ```bash
 insmod kernel_module.ko
+```
+
+### 4.1.2 卸載
+
+```bash
 rmmod kernel_module.ko
 ```
 
-### 4.2 Hello World (60)
+### 4.2 Hello World (60%)
 
 ```c
 #include <linux/init.h>
@@ -144,9 +149,9 @@ module_exit(hello_exit);
 |KERN_DEBUG    |  "7" |Debug messages |
 
 
-### 4.3 Read Hardware Value (20)
+### 4.3 Read Hardware Value (20%)
 
 
 
 
-### 4.4 Write Character Device (20)
+### 4.4 Write Character Device (20%)
