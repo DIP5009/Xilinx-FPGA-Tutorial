@@ -8,29 +8,30 @@ Author :
 
 ## 1. Outline
 - [1. Outline](#1-outline)
-- [2. SD Card](#2-sd-card)
+- [2. SD Card (虛擬機)](#2-sd-card-%e8%99%9b%e6%93%ac%e6%a9%9f)
   - [2.1 GNOME Disk](#21-gnome-disk)
   - [2.2 還原映像檔](#22-%e9%82%84%e5%8e%9f%e6%98%a0%e5%83%8f%e6%aa%94)
   - [2.3 選擇映像檔](#23-%e9%81%b8%e6%93%87%e6%98%a0%e5%83%8f%e6%aa%94)
   - [2.4 延伸磁區(*按錯就完了*)](#24-%e5%bb%b6%e4%bc%b8%e7%a3%81%e5%8d%80%e6%8c%89%e9%8c%af%e5%b0%b1%e5%ae%8c%e4%ba%86)
-- [3. Petalinux](#3-petalinux)
+- [3. Petalinux (Server)](#3-petalinux-server)
   - [3.1 Clear Petalinux Project](#31-clear-petalinux-project)
   - [3.2 Configure Petalinux Project](#32-configure-petalinux-project)
   - [3.3 Create Kernel Module Template](#33-create-kernel-module-template)
   - [3.4 Build Kernel Modules](#34-build-kernel-modules)
 - [4. Kernel Module](#4-kernel-module)
-  - [4.1 掛載/卸載](#41-%e6%8e%9b%e8%bc%89%e5%8d%b8%e8%bc%89)
-  - [4.2 Hello World (60)](#42-hello-world-60)
+  - [4.1.1 掛載](#411-%e6%8e%9b%e8%bc%89)
+  - [4.1.2 卸載](#412-%e5%8d%b8%e8%bc%89)
+  - [4.2 Hello World (50%)](#42-hello-world-50)
     - [4.2.1 MODULE_LICENSE](#421-modulelicense)
     - [4.2.2 module_init](#422-moduleinit)
     - [4.2.2 module_exit](#422-moduleexit)
     - [4.2.3 printk](#423-printk)
     - [4.2.4 其他printk優先度](#424-%e5%85%b6%e4%bb%96printk%e5%84%aa%e5%85%88%e5%ba%a6)
-  - [4.3 Read Hardware Value (20)](#43-read-hardware-value-20)
-  - [4.4 Write Character Device (20)](#44-write-character-device-20)
+  - [4.3 Read Hardware Value (30%)](#43-read-hardware-value-30)
+  - [4.4 Write Character Device (20%)](#44-write-character-device-20)
 
 
-## 2. SD Card
+## 2. SD Card (虛擬機)
 
 ### 2.1 GNOME Disk
 
@@ -57,7 +58,7 @@ gnome-disks
 
 ![fdisk_2](images/Image/fdisk_2.png)
 
-## 3. Petalinux
+## 3. Petalinux (Server)
 
 ### 3.1 Clear Petalinux Project
 
@@ -82,7 +83,7 @@ petalinux-create -t modules -n <Kernel Module File Name>
 ### 3.4 Build Kernel Modules
 
 ```bash
-petalinux-build -s <Kernel Module File Name>
+petalinux-build -c <Kernel Module File Name>
 ```
 
 ## 4. Kernel Module
@@ -99,7 +100,12 @@ insmod kernel_module.ko
 rmmod kernel_module.ko
 ```
 
-### 4.2 Hello World (60%)
+### 4.2 Hello World (50%)
+
+- 使用petalinux-create建立driver模本
+```bash
+petalinux-create -t modules -n <module_name>
+```
 
 ```c
 #include <linux/init.h>
@@ -149,9 +155,28 @@ module_exit(hello_exit);
 |KERN_DEBUG    |  "7" |Debug messages |
 
 
-### 4.3 Read Hardware Value (20%)
+### 4.3 Read Hardware Value (30%)
+- 使用petalinux-create建立driver模本
+```bash
+petalinux-create -t modules <module_name>
+```
 
+- 完成圖
 
-
+![read_hw](./images/read_hardware.png)
 
 ### 4.4 Write Character Device (20%)
+
+- 使用剛剛做的driver
+
+- g++ main_lite.cpp -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
+
+- 完成圖
+
+- 軟體運算結果
+  
+![read_hw](./images/sw_result.bmp)
+
+- 硬體運算結果
+  
+![read_hw](./images/hw_result.bmp)
