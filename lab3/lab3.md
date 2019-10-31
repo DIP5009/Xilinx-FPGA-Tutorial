@@ -12,7 +12,6 @@ Author :
   - [2.1 GNOME Disk](#21-gnome-disk)
   - [2.2 還原映像檔](#22-%e9%82%84%e5%8e%9f%e6%98%a0%e5%83%8f%e6%aa%94)
   - [2.3 選擇映像檔](#23-%e9%81%b8%e6%93%87%e6%98%a0%e5%83%8f%e6%aa%94)
-  - [2.4 延伸磁區(*按錯就完了*)](#24-%e5%bb%b6%e4%bc%b8%e7%a3%81%e5%8d%80%e6%8c%89%e9%8c%af%e5%b0%b1%e5%ae%8c%e4%ba%86)
 - [3. Petalinux (Server)](#3-petalinux-server)
   - [3.1 Clear Petalinux Project](#31-clear-petalinux-project)
   - [3.2 Configure Petalinux Project](#32-configure-petalinux-project)
@@ -51,12 +50,6 @@ gnome-disks
 ### 2.3 選擇映像檔
 
 ![gnome_disk_4](./images/Image/gnome_disk_4.png)
-
-### 2.4 延伸磁區(*按錯就完了*)
-
-![fdisk](images/Image/fdisk.png)
-
-![fdisk_2](images/Image/fdisk_2.png)
 
 ## 3. Petalinux (Server)
 
@@ -111,7 +104,7 @@ petalinux-create -t modules -n <module_name>
 #include <linux/init.h>
 #include <linux/module.h>
 
-MODULE_LICENSE("Dual BSD/GPL);
+MODULE_LICENSE("Dual BSD/GPL");
 
 static int __init hello_init(void){
     printk(KERN_INFO "Hello World!\n");
@@ -160,6 +153,7 @@ module_exit(hello_exit);
 ```bash
 petalinux-create -t modules <module_name>
 ```
+- 
 
 - 完成圖
 
