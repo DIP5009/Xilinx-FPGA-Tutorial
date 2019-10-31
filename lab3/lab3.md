@@ -153,7 +153,157 @@ module_exit(hello_exit);
 ```bash
 petalinux-create -t modules <module_name>
 ```
-- 
+- Template
+```c
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/slab.h>
+#include <linux/of_address.h>
+#include <linux/of_device.h>
+#include <linux/of_platform.h>
+
+/* Standard module information, edit as appropriate */
+MODULE_LICENSE("GPL");
+
+#define DRIVER_NAME "Mid"
+
+//用來存放硬體資訊
+struct sobel_driver_local {
+	unsigned long mem_start; //存放IO Address的起點
+	unsigned long mem_end;   //存放IO Address的終點
+	void __iomem *base_addr; //存放IO Address映射至哪個Virtual Address
+};
+
+
+//初始化函式
+static int sobel_driver_probe(struct platform_device *pdev)
+{
+	struct resource *r_mem; /* IO mem resources */
+	struct device *dev = &pdev->dev;
+	struct sobel_driver_local *lp = NULL;
+
+	int rc = 0;
+	dev_info(dev, "Device Tree Probing\n");
+	/* 將Device Tree的資訊提取出來 */
+	r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+	
+    if (!r_mem) {
+		dev_err(dev, "invalid address\n");
+		return -ENODEV;
+	}
+    //替自己寫的struct分配一塊記憶體空間
+	lp = (struct sobel_driver_local *) kmalloc(sizeof(struct sobel_driver_local), GFP_KERNEL);
+	if (!lp) {
+		dev_err(dev, "Cound not allocate sobel-driver device\n");
+		return -ENOMEM;
+
+	dev_set_drvdata(dev, lp);
+    //將提取出來的資訊儲存至自己寫的strut中
+	lp->mem_start = r_mem->start;
+	lp->mem_end = r_mem->end;
+
+    //在作業系統中保留一塊記憶體區塊
+	if (!request_mem_region(lp->mem_start,
+				lp->mem_end - lp->mem_start + 1,
+				DRIVER_NAME)) {
+		dev_err(dev, "Couldn't lock memory region at %p\n",
+			(void *)lp->mem_start);
+		rc = -EBUSY;
+		goto error1;
+	}
+
+    //將IO Address的記憶體映射至Virtual Address
+	lp->base_addr = ioremap(lp->mem_start, lp->mem_end - lp->mem_start + 1);
+	if (!lp->base_addr) {
+		dev_err(dev, "sobel-driver: Could not allocate iomem\n");
+		rc = -EIO;
+		goto error2;
+	}
+
+	dev_info(dev,"sobel-driver at 0x%08x mapped to 0x%08x\n",
+		(unsigned int __force)lp->mem_start,
+		(unsigned int __force)lp->base_addr);
+    
+	/*
+	*	請參考Lab2
+	*	如何將OUTPUT的值印出來
+	*	Hint:
+	*		printf("%d\n",data);(注意這是SDK的寫法)
+	*/
+	
+	return 0;
+
+
+error2:
+    //釋放被作業系統保留的記憶體區塊
+	release_mem_region(lp->mem_start, lp->mem_end - lp->mem_start + 1);
+error1:
+    //將kmalloc分配的記憶體釋放掉
+	kfree(lp);
+    //將指標清空
+	dev_set_drvdata(dev, NULL);
+	return rc;
+}
+
+//卸載函式
+static int sobel_driver_remove(struct platform_device *pdev)
+{
+	struct device *dev = &pdev->dev;
+	struct sobel_driver_local *lp = dev_get_drvdata(dev);
+    //取消IO Address與Virtual address之間的映射
+	iounmap(lp->base_addr);
+    //釋放被作業系統保留的記憶體區塊
+	release_mem_region(lp->mem_start, lp->mem_end - lp->mem_start + 1);
+    //將kmalloc分配的記憶體釋放掉
+	kfree(lp);
+    //將指標清空
+	dev_set_drvdata(dev, NULL);
+	return 0;
+}
+
+//設定"sobel_driver_of_match"要取得哪個Deivce Tree的資訊
+#ifdef CONFIG_OF
+static struct of_device_id sobel_driver_of_match[] = {
+	{ .compatible = "xlnx,Mid-1.0", },
+	{ /* end of list */ },
+};
+MODULE_DEVICE_TABLE(of, sobel_driver_of_match);
+#else
+# define sobel_driver_of_match
+#endif
+
+//設定Driver的資訊
+//設定Driver被註冊或是註銷時要執行哪個函式
+//設定Driver的of_device_id(Device Tree的資訊)為何
+static struct platform_driver sobel_driver_driver = {
+	.driver = {
+		.name = DRIVER_NAME,
+		.owner = THIS_MODULE,
+		.of_match_table	= sobel_driver_of_match,
+	},
+	.probe		= sobel_driver_probe,
+	.remove		= sobel_driver_remove,
+};
+
+static int __init sobel_driver_init(void)
+{
+    printk(KERN_ALERT "Hello world.\n");
+	return platform_driver_register(&sobel_driver_driver);
+}
+
+static void __exit sobel_driver_exit(void)
+{
+	platform_driver_unregister(&sobel_driver_driver);
+	printk(KERN_ALERT "Goodbye module world.\n");
+}
+
+//設定Driver註冊時要執行什麼
+module_init(sobel_driver_init);
+
+//設定Driver註銷時要執行什麼
+module_exit(sobel_driver_exit);
+```
 
 - 完成圖
 
